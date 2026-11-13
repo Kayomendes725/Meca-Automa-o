@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MECA Automação | Engenharia, Painéis e Manutenção Elétrica em SP</title>
+    <meta name="description" content="Engenharia de automação, montagem de painéis, e manutenção elétrica industrial e comercial em todo o Estado de São Paulo.">
+    
+    <!-- Google Fonts: Space Grotesk (Títulos), Inter (Leitura), JetBrains Mono (Técnico) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons (Ícones Técnicos Limpos) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate900: '#0F172A',
+                        slate800: '#1E293B',
+                        slate50: '#F8FAFC',
+                        slate200: '#E2E8F0',
+                        industrialBlue: '#0284C7',
+                        industrialBlueHover: '#0369A1',
+                        safetyOrange: '#EA580C',
+                        safetyOrangeHover: '#C2410C',
+                        borderDark: '#334155',
+                        borderLight: '#CBD5E1'
+                    },
+                    fontFamily: {
+                        heading: ['"Space Grotesk"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Texturas de Grade Técnica (Blueprint) */
+        .bg-grid-dark {
+            background-image: 
+                linear-gradient(#1e293b 1px, transparent 1px), 
+                linear-gradient(90deg, #1e293b 1px, transparent 1px);
+            background-size: 48px 48px;
+            background-position: center center;
+        }
+        .bg-grid-light {
+            background-image: 
+                linear-gradient(#e2e8f0 1px, transparent 1px), 
+                linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+            background-size: 48px 48px;
+            background-position: center center;
+        }
+
+        /* Classes de apoio tipográfico */
+        .tech-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Animação do LED de Status */
+        .led-pulse {
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        /* Custom Scrollbar para visual técnico */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0F172A; border-left: 1px solid #334155; }
+        ::-webkit-scrollbar-thumb { background: #334155; }
+        ::-webkit-scrollbar-thumb:hover { background: #0284C7; }
+    </style>
+</head>
+<body class="font-body text-slate900 bg-slate50 antialiased selection:bg-safetyOrange selection:text-white">
+
+    <!-- HEADER -->
+    <header class="fixed w-full top-0 z-50 bg-slate900/95 backdrop-blur-sm border-b border-borderDark text-white">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2 group">
+                <i class="ph ph-cpu text-3xl text-industrialBlue group-hover:text-safetyOrange transition-colors"></i>
+                <div class="flex flex-col">
+                    <span class="font-heading font-bold text-xl leading-none tracking-tight">MECA</span>
+                    <span class="font-mono text-[0.65rem] text-slate-400 tracking-widest leading-none mt-1">AUTOMAÇÃO</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-8 font-mono text-sm">
+                <a href="#servicos" class="text-slate-300 hover:text-white transition-colors">01.SERVIÇOS</a>
+                <a href="#atuacao" class="text-slate-300 hover:text-white transition-colors">02.ATUAÇÃO</a>
+                <a href="#processo" class="text-slate-300 hover:text-white transition-colors">03.PROCESSO</a>
+                <a href="#contato" class="bg-safetyOrange hover:bg-safetyOrangeHover text-white px-5 py-2.5 flex items-center gap-2 transition-colors border border-safetyOrange">
+                    <i class="ph ph-whatsapp-logo text-lg"></i>
+                    CHAMAR TÉCNICO
+                </a>
+            </nav>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-white text-2xl">
+                <i class="ph ph-list"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Nav (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate900 border-t border-borderDark px-6 py-4 font-mono text-sm space-y-4">
+            <a href="#servicos" class="block text-slate-300 hover:text-white mobile-link">01.SERVIÇOS</a>
+            <a href="#atuacao" class="block text-slate-300 hover:text-white mobile-link">02.ATUAÇÃO</a>
+            <a href="#processo" class="block text-slate-300 hover:text-white mobile-link">03.PROCESSO</a>
+            <a href="#contato" class="block text-safetyOrange mobile-link flex items-center gap-2">
+                <i class="ph ph-whatsapp-logo text-lg"></i> CHAMAR TÉCNICO
+            </a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative bg-slate900 text-white pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-grid-dark">
+        <!-- Radial gradient to fade grid edges -->
+        <div class="absolute inset-0 bg-slate900/60 pointer-events-none"></div>
+        
+        <div class="relative max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Hero Copy -->
+            <div class="lg:col-span-7 space-y-8">
+                <div class="inline-flex items-center gap-2 border border-borderDark bg-slate800/50 px-3 py-1.5 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-safetyOrange led-pulse"></span>
+                    <span class="tech-tag text-slate-300">PLANTÃO TÉCNICO ATIVO</span>
+                </div>
+                
+                <h1 class="font-heading font-bold text-4xl md:text-5xl lg:text-6xl leading-tight">
+                    Sua linha de produção ou <span class="text-safetyOrange">equipamento parou?</span>
+                </h1>
+                
+                <p class="font-body text-lg text-slate-400 max-w-2xl leading-relaxed">
+                    Engenharia de automação, montagem de painéis de comando e manutenção elétrica em todo o Estado de São Paulo. Do reparo emergencial à integração completa do sistema para evitar nova parada de máquina.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <a href="#contato" class="bg-safetyOrange hover:bg-safetyOrangeHover text-white font-mono text-sm px-6 py-4 flex items-center justify-center gap-3 transition-colors border border-safetyOrange">
+                        <i class="ph ph-warning-circle text-xl"></i>
+                        SOLICITAR ATENDIMENTO RÁPIDO
+                    </a>
+                    <a href="#servicos" class="bg-transparent hover:bg-slate800 text-white font-mono text-sm px-6 py-4 flex items-center justify-center gap-3 transition-colors border border-borderDark">
+                        <i class="ph ph-gear text-xl"></i>
+                        CONHECER SERVIÇOS
+                    </a>
+                </div>
+            </div>
+
+<!-- Telemetry Card Visual (Hardware IHM Físico Interativo) -->
+            <div class="lg:col-span-5 relative w-full max-w-lg mx-auto lg:ml-auto perspective-1000">
+                
+                <div class="absolute -inset-2 bg-gradient-to-tr from-industrialBlue to-safetyOrange opacity-20 blur-2xl"></div>
+                
+                <!-- Carcaça do Hardware -->
+                <div class="relative bg-zinc-800 rounded-xl p-3 shadow-2xl border-t border-l border-zinc-700 border-b-4 border-r-4 border-zinc-950">
+                    
+                    <div class="flex justify-between items-center mb-3 px-2">
+                        <span class="font-heading font-bold text-zinc-400 text-[10px] tracking-[0.2em] uppercase">MECA TouchPanel 10"</span>
+                        <div class="flex gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 led-pulse" title="PWR"></span>
+                            <span id="led-com" class="w-1.5 h-1.5 rounded-full bg-zinc-600 transition-colors duration-200" title="COM"></span>
+                            <span id="led-alm" class="w-1.5 h-1.5 rounded-full bg-zinc-600 transition-colors duration-200" title="ALM"></span>
+                        </div>
+                    </div>
+
+                    <!-- Tela TFT -->
+                    <div class="bg-slate-900 rounded-sm border-2 border-zinc-950 overflow-hidden relative shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] h-[320px] flex flex-col font-mono select-none">
+                        
+                        <!-- Header do Software -->
+                        <div class="bg-slate-800 border-b border-slate-700 px-3 py-1.5 flex justify-between items-center text-[10px] text-slate-300">
+                            <span id="ihm-title">TELA 01 - PROCESSO DE DOSAGEM</span>
+                            <span class="text-green-400 font-bold">CLP: RUN</span>
+                        </div>
+
+                        <!-- CONTAINER DAS TELAS -->
+                        <div class="flex-1 relative">
+                            
+                            <!-- TELA 1: PROCESSO (Ativa por padrão) -->
+                            <div id="screen-processo" class="absolute inset-0 p-3 grid grid-cols-2 gap-4">
+                                <div class="border border-slate-700/50 bg-slate-800/30 p-2 relative flex flex-col items-center justify-end rounded-sm">
+                                    <span class="text-[9px] text-slate-400 absolute top-2 left-2">TQ-100 NÍVEL</span>
+                                    <div class="w-16 h-28 border-2 border-slate-500 rounded-b-lg relative mt-6 overflow-hidden bg-slate-900 shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]">
+                                        <div class="absolute bottom-0 w-full h-[65%] bg-industrialBlue opacity-80 border-t border-blue-400"></div>
+                                        <span class="absolute inset-0 flex items-center justify-center text-white text-xs font-bold z-10 drop-shadow-md">65%</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-3 flex flex-col justify-center">
+                                    <div class="bg-slate-800 border border-slate-700 p-2 rounded-sm shadow-sm">
+                                        <div class="text-[9px] text-slate-400 mb-1">BOMBA DOSADORA</div>
+                                        <div class="bg-green-500 text-slate-900 text-center font-bold text-xs py-1 rounded-sm">LIGADA</div>
+                                    </div>
+                                    <div class="bg-slate-800 border border-slate-700 p-2 rounded-sm space-y-1">
+                                        <div class="flex justify-between items-end border-b border-slate-700/50 pb-1">
+                                            <span class="text-[9px] text-slate-400">VOL ATUAL</span>
+                                            <span class="text-safetyOrange font-bold text-sm leading-none">125 L</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-[8px] text-slate-500 flex justify-between border-t border-slate-700 pt-1 mt-2 tracking-wider">
+                                        <span>CLIENTE: PLASTVINIL</span>
+                                        <span>MODBUS TCP</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TELA 2: MENU PRINCIPAL (Oculta) -->
+                            <div id="screen-menu" class="absolute inset-0 p-4 hidden flex flex-col">
+                                <div class="grid grid-cols-2 gap-3 h-full">
+                                    <div class="border border-slate-700 bg-slate-800/50 hover:bg-slate-700 flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors rounded-sm">
+                                        <i class="ph ph-sliders text-2xl text-industrialBlue"></i>
+                                        <span class="text-[10px] text-slate-300">PARÂMETROS</span>
+                                    </div>
+                                    <div class="border border-slate-700 bg-slate-800/50 hover:bg-slate-700 flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors rounded-sm">
+                                        <i class="ph ph-chart-line-up text-2xl text-industrialBlue"></i>
+                                        <span class="text-[10px] text-slate-300">TENDÊNCIAS</span>
+                                    </div>
+                                    <div class="border border-slate-700 bg-slate-800/50 hover:bg-slate-700 flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors rounded-sm">
+                                        <i class="ph ph-plugs text-2xl text-industrialBlue"></i>
+                                        <span class="text-[10px] text-slate-300">I/O FÍSICO</span>
+                                    </div>
+                                    <div class="border border-slate-700 bg-slate-800/50 hover:bg-slate-700 flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors rounded-sm">
+                                        <i class="ph ph-users text-2xl text-industrialBlue"></i>
+                                        <span class="text-[10px] text-slate-300">USUÁRIOS</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TELA 3: SETUP TÉCNICO (Oculta) -->
+                            <div id="screen-setup" class="absolute inset-0 p-4 hidden">
+                                <div class="bg-slate-800 border border-slate-700 rounded-sm p-3 h-full flex flex-col text-[10px]">
+                                    <span class="text-safetyOrange font-bold mb-3 border-b border-slate-600 pb-1">CONFIGURAÇÃO DE HARDWARE</span>
+                                    <div class="space-y-2 text-slate-300 flex-1">
+                                        <div class="flex justify-between border-b border-slate-700/50 pb-1">
+                                            <span>CLP MODELO</span>
+                                            <span class="text-industrialBlue font-bold">AS320P-B</span>
+                                        </div>
+                                        <div class="flex justify-between border-b border-slate-700/50 pb-1">
+                                            <span>CONTAGEM RÁPIDA</span>
+                                            <span class="text-white font-bold">200 kHz (4CH)</span>
+                                        </div>
+                                        <div class="flex justify-between border-b border-slate-700/50 pb-1">
+                                            <span>ISOLAÇÃO SINAL</span>
+                                            <span class="text-white font-bold">PC817 + 4K7 Ω Pull-down</span>
+                                        </div>
+                                        <div class="flex justify-between border-b border-slate-700/50 pb-1">
+                                            <span>FATOR DE DOSAGEM</span>
+                                            <span class="text-safetyOrange font-bold">5.4 mL / pulso</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>REGISTRADOR ATUAL</span>
+                                            <span class="text-industrialBlue font-bold">D1000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TELA 4: ALARMES (Oculta) -->
+                            <div id="screen-alarme" class="absolute inset-0 p-4 hidden">
+                                <div class="bg-slate-800 border border-red-900/50 rounded-sm h-full flex flex-col text-[9px]">
+                                    <div class="bg-red-900/40 text-red-400 font-bold px-2 py-1 border-b border-red-900/50 flex justify-between">
+                                        <span>HISTÓRICO DE EVENTOS</span>
+                                        <span>ACK</span>
+                                    </div>
+                                    <div class="p-2 space-y-2 overflow-y-auto">
+                                        <div class="flex gap-2 text-slate-400">
+                                            <span class="text-slate-500">09:14:22</span>
+                                            <span class="text-red-400">[FALHA] Sobrecarga Bomba M1</span>
+                                        </div>
+                                        <div class="flex gap-2 text-slate-400">
+                                            <span class="text-slate-500">08:30:00</span>
+                                            <span class="text-yellow-500">[AVISO] Nível TQ-100 Baixo</span>
+                                        </div>
+                                        <div class="flex gap-2 text-slate-400">
+                                            <span class="text-slate-500">06:00:15</span>
+                                            <span class="text-green-400">[INFO] Sistema Iniciado</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Botões Físicos/Touch no Rodapé -->
+                        <div class="grid grid-cols-4 gap-[2px] p-[2px] bg-slate-800 border-t border-slate-700 mt-auto">
+                            <button id="btn-f1" class="ihm-btn bg-slate-700 border border-slate-600 text-slate-300 text-[10px] font-bold py-2.5 hover:bg-industrialBlue hover:text-white transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] focus:outline-none">F1 MENU</button>
+                            <button id="btn-f2" class="ihm-btn bg-slate-700 border border-slate-600 text-slate-300 text-[10px] font-bold py-2.5 hover:bg-industrialBlue hover:text-white transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] focus:outline-none">F2 SETUP</button>
+                            <button id="btn-f3" class="ihm-btn bg-slate-700 border border-slate-600 text-slate-300 text-[10px] font-bold py-2.5 hover:bg-safetyOrange hover:text-white transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] focus:outline-none">F3 ALARME</button>
+                            <button id="btn-f4" class="ihm-btn bg-industrialBlue border border-blue-600 text-white text-[10px] font-bold py-2.5 hover:bg-industrialBlueHover transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] focus:outline-none">F4 PROCESSO</button>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- TICKER ESPECIALIDADES (Faixa Técnica) -->
+    <div class="bg-slate800 border-y border-borderDark overflow-hidden py-4">
+        <div class="max-w-7xl mx-auto px-6 flex flex-wrap justify-center md:justify-between items-center gap-6 font-mono text-xs md:text-sm text-slate-400">
+            <span class="flex items-center gap-2"><i class="ph ph-microchip text-industrialBlue"></i> CLPs & IHMs</span>
+            <span class="hidden md:inline text-borderDark">|</span>
+            <span class="flex items-center gap-2"><i class="ph ph-faders text-industrialBlue"></i> Montagem de Painéis</span>
+            <span class="hidden md:inline text-borderDark">|</span>
+            <span class="flex items-center gap-2"><i class="ph ph-waves text-industrialBlue"></i> Inversores & Soft-Starters</span>
+            <span class="hidden lg:inline text-borderDark">|</span>
+            <span class="flex items-center gap-2 hidden lg:flex"><i class="ph ph-desktop text-industrialBlue"></i> Sistemas SCADA</span>
+            <span class="hidden lg:inline text-borderDark">|</span>
+            <span class="flex items-center gap-2"><i class="ph ph-shield-check text-safetyOrange"></i> Adequação NR-12</span>
+        </div>
+    </div>
+
+    <!-- SEÇÃO DE SERVIÇOS (Bento Grid) -->
+    <section id="servicos" class="py-24 bg-slate50 bg-grid-light relative">
+        <div class="absolute inset-0 bg-slate50/80 pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative">
+            
+            <div class="mb-16 max-w-3xl">
+                <span class="tech-tag text-industrialBlue mb-4 block">01. SOLUÇÕES INTEGRADAS</span>
+                <h2 class="font-heading font-bold text-3xl md:text-4xl mb-4">Engenharia de ponta a ponta.</h2>
+                <p class="text-slate-600 font-body text-lg">Dominamos a integração eletromecânica. Resolvendo problemas elétricos, lógicos, pneumáticos e hidráulicos com precisão documentada.</p>
+            </div>
+
+            <!-- Grid Assimétrico -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Serviço 1: Painéis -->
+                <div class="bg-white border border-borderLight p-8 hover:border-industrialBlue transition-colors group">
+                    <div class="w-14 h-14 bg-slate900 flex items-center justify-center mb-6">
+                        <i class="ph ph-faders text-3xl text-white group-hover:text-industrialBlue transition-colors"></i>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl mb-3">Montagem de Painéis e Comandos</h3>
+                    <p class="text-slate-600 mb-6">Montagem limpa, diagramas elétricos rigorosos e identificação de cabos padrão ABNT. Quadros de força, comando, QGBT e partida de motores (CCMs).</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-slate-100 text-slate-600 tech-tag px-2 py-1">QGBT</span>
+                        <span class="bg-slate-100 text-slate-600 tech-tag px-2 py-1">COMANDO</span>
+                        <span class="bg-slate-100 text-slate-600 tech-tag px-2 py-1">NR-10</span>
+                    </div>
+                </div>
+
+                <!-- Serviço 2: Automação -->
+                <div class="bg-white border border-borderLight p-8 hover:border-industrialBlue transition-colors group">
+                    <div class="w-14 h-14 bg-slate900 flex items-center justify-center mb-6">
+                        <i class="ph ph-cpu text-3xl text-white group-hover:text-industrialBlue transition-colors"></i>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl mb-3">Automação Industrial e Comercial</h3>
+                    <p class="text-slate-600 mb-6">Programação estruturada de CLPs, IHMs e sistemas supervisórios. Retrofitting de máquinas antigas e automação de processos prediais para estabelecimentos.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-slate-100 text-slate-600 tech-tag px-2 py-1">CLP / PLC</span>
+                        <span class="bg-slate-100 text-slate-600 tech-tag px-2 py-1">IHM</span>
+                        <span class="bg-slate-100 text-slate-600 tech-tag px-2 py-1">RETROFITTING</span>
+                    </div>
+                </div>
+
+                <!-- Serviço 3: Manutenção -->
+                <div class="bg-white border border-borderLight p-8 hover:border-safetyOrange transition-colors group">
+                    <div class="w-14 h-14 bg-safetyOrange flex items-center justify-center mb-6">
+                        <i class="ph ph-wrench text-3xl text-white"></i>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl mb-3">Manutenção e Reparos Elétricos</h3>
+                    <p class="text-slate-600 mb-6">Diagnóstico ágil de falhas e troca de componentes para máquina parada. Atendemos emergências em fábricas, oficinas e comércios com agilidade.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-orange-50 text-safetyOrange border border-orange-200 tech-tag px-2 py-1">EMERGÊNCIA</span>
+                        <span class="bg-slate-100 text-slate-600 tech-tag px-2 py-1">TROCA DE DRIVE</span>
+                        <span class="bg-slate-100 text-slate-600 tech-tag px-2 py-1">CURTO-CIRCUITO</span>
+                    </div>
+                </div>
+
+                <!-- Serviço 4: Consultoria -->
+                <div class="bg-white border border-borderLight p-8 hover:border-industrialBlue transition-colors group">
+                    <div class="w-14 h-14 bg-slate900 flex items-center justify-center mb-6">
+                        <i class="ph ph-blueprint text-3xl text-white group-hover:text-industrialBlue transition-colors"></i>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl mb-3">Engenharia e Projetos Especiais</h3>
+                    <p class="text-slate-600 mb-6">Levantamento de campo, emissão de ART, laudos técnicos, projetos elétricos EPLAN/AutoCAD e especificação de materiais integrando pneumática e hidráulica.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-slate-100 text-slate-600 tech-tag px-2 py-1">PROJETO ELÉTRICO</span>
+                        <span class="bg-slate-100 text-slate-600 tech-tag px-2 py-1">LAUDOS</span>
+                        <span class="bg-slate-100 text-slate-600 tech-tag px-2 py-1">PNEUMÁTICA</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO ATUAÇÃO (Público Dual) -->
+    <section id="atuacao" class="py-24 bg-slate900 text-white border-y border-borderDark">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <div class="text-center mb-16">
+                <span class="tech-tag text-industrialBlue mb-4 block">02. PERFIL DE ATENDIMENTO</span>
+                <h2 class="font-heading font-bold text-3xl md:text-4xl mb-4">Soluções na escala da sua necessidade.</h2>
+                <p class="text-slate-400 font-body max-w-2xl mx-auto">Da linha de montagem contínua ao reparo pontual no quadro de força da sua loja. A engenharia aplicada à sua realidade.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+             <!-- Indústrias -->
+<div class="bg-slate800 border border-borderDark p-8 lg:p-12 relative overflow-hidden group">
+    <i class="ph ph-factory text-[8rem] text-slate-700 absolute -bottom-6 -right-6 opacity-30 group-hover:text-industrialBlue group-hover:opacity-20 transition-all"></i>
+    <div class="relative z-10">
+        <h3 class="font-heading font-bold text-2xl mb-4 text-white">Indústria & Manufatura</h3>
+        <ul class="space-y-4 font-body text-slate-300 mb-8">
+            <li class="flex gap-3">
+                <i class="ph ph-check-square text-industrialBlue mt-1 text-lg shrink-0"></i> 
+                <span>Desenvolvimento e programação estruturada de <strong>CLPs e IHMs</strong> para controle de processos e automação de maquinário industrial.</span>
+            </li>
+            <li class="flex gap-3">
+                <i class="ph ph-check-square text-industrialBlue mt-1 text-lg shrink-0"></i> 
+                <span><strong>Retrofitting elétrico e lógico:</strong> modernização de painéis com comandos defasados para sistemas inteligentes e de alta confiabilidade.</span>
+            </li>
+            <li class="flex gap-3">
+                <i class="ph ph-check-square text-industrialBlue mt-1 text-lg shrink-0"></i> 
+                <span>Integração de <strong>redes industriais e sistemas supervisórios (SCADA)</strong> para telemetria e monitoramento da produção em tempo real.</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+                <!-- Pequenos Negócios -->
+                <div class="bg-slate800 border border-borderDark p-8 lg:p-12 relative overflow-hidden group">
+                    <i class="ph ph-storefront text-[8rem] text-slate-700 absolute -bottom-6 -right-6 opacity-30 group-hover:text-safetyOrange group-hover:opacity-20 transition-all"></i>
+                    <div class="relative z-10">
+                        <h3 class="font-heading font-bold text-2xl mb-4 text-white">Comércio & Pequenas Empresas</h3>
+                        <ul class="space-y-4 font-body text-slate-300 mb-8">
+                            <li class="flex gap-3"><i class="ph ph-check-square text-safetyOrange mt-1 text-lg"></i> Montagem e conserto de quadros de bombas, exaustores e climatização.</li>
+                            <li class="flex gap-3"><i class="ph ph-check-square text-safetyOrange mt-1 text-lg"></i> Reparo elétrico pontual: disjuntores desarmando, curtos e falhas de comando.</li>
+                            <li class="flex gap-3"><i class="ph ph-check-square text-safetyOrange mt-1 text-lg"></i> Automação simplificada para iluminação, refrigeração e controle de acesso predial.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO PROCESSO TÉCNICO -->
+    <section id="processo" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <div class="mb-16">
+                <span class="tech-tag text-industrialBlue mb-4 block">03. PROTOCOLO DE TRABALHO</span>
+                <h2 class="font-heading font-bold text-3xl md:text-4xl mb-4">Método MECA de Atendimento.</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+                <!-- Linha conectora desktop -->
+                <div class="hidden lg:block absolute top-12 left-0 w-full h-[1px] bg-borderLight -z-10 mt-2"></div>
+
+                <!-- Passo 1 -->
+                <div class="bg-white">
+                    <span class="font-mono text-5xl font-bold text-slate-200 mb-4 block">01</span>
+                    <h4 class="font-heading font-bold text-lg mb-2">Diagnóstico Técnico</h4>
+                    <p class="text-slate-600 text-sm">Avaliação remota ou visita in loco para mapear o defeito elétrico, lógico ou mecânico do equipamento.</p>
+                </div>
+
+                <!-- Passo 2 -->
+                <div class="bg-white">
+                    <span class="font-mono text-5xl font-bold text-slate-200 mb-4 block">02</span>
+                    <h4 class="font-heading font-bold text-lg mb-2">Escopo Transparente</h4>
+                    <p class="text-slate-600 text-sm">Apresentação da solução e orçamento com especificação de materiais, sem custos ocultos para sua empresa.</p>
+                </div>
+
+                <!-- Passo 3 -->
+                <div class="bg-white">
+                    <span class="font-mono text-5xl font-bold text-slate-200 mb-4 block">03</span>
+                    <h4 class="font-heading font-bold text-lg mb-2">Execução Rápida</h4>
+                    <p class="text-slate-600 text-sm">Montagem do painel em nossa bancada ou intervenção direta na sua planta com equipe paramentada.</p>
+                </div>
+
+                <!-- Passo 4 -->
+                <div class="bg-white">
+                    <span class="font-mono text-5xl font-bold text-slate-200 mb-4 block">04</span>
+                    <h4 class="font-heading font-bold text-lg mb-2">Comissionamento</h4>
+                    <p class="text-slate-600 text-sm">Testes de carga, I/O, segurança (NR-12) e entrega técnica com diagramas atualizados para o seu time.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO DE CONTATO / ORÇAMENTO -->
+    <section id="contato" class="py-24 bg-slate100 border-t border-borderLight relative overflow-hidden">
+        <!-- Detalhe visual de fundo -->
+        <div class="absolute right-0 bottom-0 w-[500px] h-[500px] bg-slate-200 rounded-full blur-3xl opacity-50 -z-10 translate-x-1/2 translate-y-1/2"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            
+            <div>
+                <span class="tech-tag text-safetyOrange mb-4 block">04. CANAL DIRETO</span>
+                <h2 class="font-heading font-bold text-3xl md:text-5xl mb-6">Precisa de um orçamento ou suporte imediato?</h2>
+                <p class="text-slate-600 font-body text-lg mb-8">
+                    Preencha os dados básicos ao lado para agilizar o atendimento. Nossa equipe de engenharia receberá sua demanda e iniciará o diagnóstico via WhatsApp.
+                </p>
+                
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-white border border-borderLight flex items-center justify-center">
+                            <i class="ph ph-map-pin text-2xl text-industrialBlue"></i>
+                        </div>
+                        <div>
+                            <span class="block font-bold font-heading">Cobertura Total</span>
+                            <span class="text-slate-600 text-sm">Atendimento em todo o Estado de São Paulo.</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-white border border-borderLight flex items-center justify-center">
+                            <i class="ph ph-clock text-2xl text-industrialBlue"></i>
+                        </div>
+                        <div>
+                            <span class="block font-bold font-heading">Agilidade no Reparo</span>
+                            <span class="text-slate-600 text-sm">Foco absoluto em redução de downtime da sua operação.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário interativo para WhatsApp -->
+            <div class="bg-white border border-borderLight p-8 shadow-xl">
+                <form id="whatsappForm" class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-1">
+                            <label class="font-mono text-xs font-bold text-slate-500 uppercase">Seu Nome</label>
+                            <input type="text" id="form-nome" required class="w-full bg-slate50 border border-borderLight p-3 focus:outline-none focus:border-industrialBlue transition-colors font-body text-sm" placeholder="Ex: João Silva">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="font-mono text-xs font-bold text-slate-500 uppercase">Empresa / Comércio</label>
+                            <input type="text" id="form-empresa" class="w-full bg-slate50 border border-borderLight p-3 focus:outline-none focus:border-industrialBlue transition-colors font-body text-sm" placeholder="Nome do local">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="font-mono text-xs font-bold text-slate-500 uppercase">Tipo de Necessidade</label>
+                        <select id="form-servico" class="w-full bg-slate50 border border-borderLight p-3 focus:outline-none focus:border-industrialBlue transition-colors font-body text-sm text-slate-700 cursor-pointer appearance-none">
+                            <option value="Manutenção / Máquina Parada">Manutenção / Equipamento Parado</option>
+                            <option value="Montagem de Painel">Montagem ou Adequação de Painel</option>
+                            <option value="Automação / CLP">Programação de CLP / Automação</option>
+                            <option value="Consultoria / Projeto Elétrico">Projeto Elétrico / Consultoria</option>
+                            <option value="Outro assunto">Outro assunto técnico</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="font-mono text-xs font-bold text-slate-500 uppercase">Breve descrição do problema (Opcional)</label>
+                        <textarea id="form-detalhes" rows="3" class="w-full bg-slate50 border border-borderLight p-3 focus:outline-none focus:border-industrialBlue transition-colors font-body text-sm resize-none" placeholder="Ex: Disjuntor principal desarmando, CLP em falha, preciso de um painel novo para bomba..."></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-safetyOrange hover:bg-safetyOrangeHover text-white font-heading font-bold text-lg px-6 py-4 flex items-center justify-center gap-2 transition-colors">
+                        <i class="ph ph-whatsapp-logo text-2xl"></i>
+                        ENVIAR PARA WHATSAPP
+                    </button>
+                    <p class="text-center font-mono text-[0.65rem] text-slate-400 mt-3">Você será redirecionado para o WhatsApp com os dados pré-preenchidos.</p>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate900 border-t border-borderDark pt-16 pb-8 text-slate-400 font-mono text-sm bg-grid-dark">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12 border-b border-borderDark pb-12">
+                
+                <!-- Logo & Descrição -->
+                <div>
+                    <a href="#" class="flex items-center gap-2 group mb-6 inline-flex">
+                        <i class="ph ph-cpu text-3xl text-industrialBlue"></i>
+                        <div class="flex flex-col text-white">
+                            <span class="font-heading font-bold text-xl leading-none tracking-tight">MECA</span>
+                            <span class="font-mono text-[0.65rem] text-slate-400 tracking-widest leading-none mt-1">AUTOMAÇÃO</span>
+                        </div>
+                    </a>
+                    <p class="text-xs leading-relaxed max-w-sm">
+                        Engenharia e soluções integradas em elétrica, automação, pneumática e mecânica. Desempenho técnico superior para evitar a máquina parada.
+                    </p>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h5 class="text-white font-heading font-bold text-lg mb-4">Navegação Técnica</h5>
+                    <ul class="space-y-3 text-xs">
+                        <li><a href="#servicos" class="hover:text-industrialBlue transition-colors">> Escopo de Serviços</a></li>
+                        <li><a href="#atuacao" class="hover:text-industrialBlue transition-colors">> Áreas de Atuação</a></li>
+                        <li><a href="#processo" class="hover:text-industrialBlue transition-colors">> Protocolo de Qualidade</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contatos (Visuais) -->
+                <div>
+                    <h5 class="text-white font-heading font-bold text-lg mb-4">Central de Atendimento</h5>
+                    <ul class="space-y-3 text-xs">
+                        <li class="flex items-center gap-2"><i class="ph ph-map-pin text-industrialBlue text-base"></i> Base: Estado de São Paulo, BR</li>
+                        <li class="flex items-center gap-2"><i class="ph ph-envelope text-industrialBlue text-base"></i> contato@mecaautomacao.com.br</li>
+                        <li class="flex items-center gap-2 text-safetyOrange font-bold"><i class="ph ph-warning-circle text-base"></i> Atendimento Emergencial Disponível</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center text-xs gap-4">
+                <p>&copy; 2026 MECA Automação. Todos os direitos reservados.</p>
+                <div class="flex gap-4">
+                    <span class="flex items-center gap-1 border border-borderDark px-2 py-1 bg-slate800"><i class="ph ph-shield-check text-green-500"></i> Conformidade NR-10</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPT DE INTERAÇÕES (JavaScript Puro) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Lógica do Menu Mobile
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                const icon = menuBtn.querySelector('i');
+                if (mobileMenu.classList.contains('hidden')) {
+                    icon.classList.remove('ph-x');
+                    icon.classList.add('ph-list');
+                } else {
+                    icon.classList.remove('ph-list');
+                    icon.classList.add('ph-x');
+                }
+            });
+
+            // Fecha o menu ao clicar em um link
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuBtn.querySelector('i').classList.remove('ph-x');
+                    menuBtn.querySelector('i').classList.add('ph-list');
+                });
+            });
+
+  // 2. Lógica de Redirecionamento de Formulário para WhatsApp
+            const whatsappForm = document.getElementById('whatsappForm');
+            
+            whatsappForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Coleta de dados
+                const nome = document.getElementById('form-nome').value.trim();
+                const empresa = document.getElementById('form-empresa').value.trim() || 'Não informada';
+                const servico = document.getElementById('form-servico').value;
+                const detalhes = document.getElementById('form-detalhes').value.trim() || 'Nenhum detalhe adicional';
+
+                // Montagem da mensagem usando quebras de linha reais do teclado (template string)
+                const mensagem = `*NOVO CHAMADO - MECA AUTOMAÇÃO*
+
+*Solicitante:* ${nome}
+*Empresa:* ${empresa}
+*Necessidade:* ${servico}
+
+*Detalhes do Defeito/Solicitação:*
+${detalhes}
+
+_Mensagem originada através do site institucional._`;
+
+                // A função encodeURIComponent traduz os espaços e quebras de linha perfeitamente para o link do WhatsApp
+                const mensagemCodificada = encodeURIComponent(mensagem);
+
+                // Número do WhatsApp (Substituir pelo número real da empresa no formato: 5511999999999)
+                const numeroWhatsApp = '5511926101775'; 
+                
+                // Gera a URL e abre em nova aba
+                const url = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
+                window.open(url, '_blank');
+            });
+        });
+    </script>
+<!-- SCRIPT DA IHM (Adicionar no final do arquivo, junto com os outros scripts) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lógica da IHM Interativa
+            const screens = {
+                'btn-f1': { id: 'screen-menu', title: 'MENU PRINCIPAL', bg: 'bg-industrialBlue', color: 'border-blue-600' },
+                'btn-f2': { id: 'screen-setup', title: 'SETUP TÉCNICO', bg: 'bg-industrialBlue', color: 'border-blue-600' },
+                'btn-f3': { id: 'screen-alarme', title: 'HISTÓRICO DE ALARMES', bg: 'bg-safetyOrange', color: 'border-orange-600', led: 'led-alm' },
+                'btn-f4': { id: 'screen-processo', title: 'TELA 01 - PROCESSO DE DOSAGEM', bg: 'bg-industrialBlue', color: 'border-blue-600', led: 'led-com' }
+            };
+
+            const btns = document.querySelectorAll('.ihm-btn');
+            const allScreens = document.querySelectorAll('[id^="screen-"]');
+            const titleEl = document.getElementById('ihm-title');
+
+            btns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const target = screens[e.target.id];
+                    
+                    // Pisca o LED de Comunicação (simulando envio de comando Modbus)
+                    const ledCom = document.getElementById('led-com');
+                    ledCom.classList.replace('bg-zinc-600', 'bg-yellow-400');
+                    setTimeout(() => ledCom.classList.replace('bg-yellow-400', 'bg-zinc-600'), 150);
+
+                    // Esconde todas as telas
+                    allScreens.forEach(s => s.classList.add('hidden'));
+                    
+                    // Reseta estilos dos botões
+                    btns.forEach(b => {
+                        b.classList.remove('bg-industrialBlue', 'bg-safetyOrange', 'border-blue-600', 'border-orange-600', 'text-white');
+                        b.classList.add('bg-slate-700', 'border-slate-600', 'text-slate-300');
+                    });
+
+                    // Mostra a tela alvo e atualiza título
+                    document.getElementById(target.id).classList.remove('hidden');
+                    titleEl.textContent = target.title;
+                    
+                    // Estiliza o botão ativo
+                    e.target.classList.remove('bg-slate-700', 'border-slate-600', 'text-slate-300');
+                    e.target.classList.add(target.bg, target.color, 'text-white');
+
+                    // Se for a tela de alarme, acende o LED de alarme vermelho
+                    const ledAlm = document.getElementById('led-alm');
+                    if(e.target.id === 'btn-f3') {
+                        ledAlm.classList.replace('bg-zinc-600', 'bg-red-500');
+                    } else {
+                        ledAlm.classList.replace('bg-red-500', 'bg-zinc-600');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
